@@ -1,0 +1,67 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-xs-9">
+
+            <div ng-show="isLoggedIn()" class="well" >
+                <i class="fa fa-shopping-cart"></i>
+                <a href="index.html#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
+                    <b>{{cart.getTotalCount()}}</b> items, <b>{{cart.getTotalPrice() | currency}}</b>
+                </a>
+
+                <span ng-show="cart.getTotalCount(product.sku) > 0" class="pull-right">
+                    This item is in the cart
+                </span>
+            </div>
+
+            <!-- product info -->
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <img class="img-responsive bacon-image" ng-src="{{product.image}}" alt="Image not found for: {{product.name}}" />
+                    </td>
+
+                    <td>
+                        <a href="#/products/{{product.sku}}"><b>{{product.name}}</b></a><br />
+                        {{product.info}}
+                    </td>
+
+                    <td class="text-center">
+                        {{product.price | currency:"&euro;"}}
+                    </td>
+                </tr>
+
+            </table>
+            <div class="well">
+                <strong>Description:</strong>
+                <br />
+                {{product.description}}
+
+                <br /><br />
+
+                <strong>Aditional Information:</strong>
+                <br />
+                {{product.additional_info}}
+            </div>
+        </div>
+
+        <!-- buttons -->
+        <div class="col-xs-3">
+            <button ng-show="isLoggedIn()"
+                    class="btn btn-block btn-success"
+                    ng-click="cart.addItem(product.sku, product.name, product.price, 1)">
+                <i class="icon-shopping-cart icon-white" /> add to cart
+            </button>
+            <button ng-show="isLoggedIn()"
+                    class="btn btn-block btn-danger"
+                    ng-click="cart.addItem(product.sku, product.name, product.price, -10000)"
+                    ng-disabled="cart.getTotalCount(product.sku) < 1">
+                <i class="icon-trash icon-white" /> remove from cart
+            </button>
+            <button class="btn btn-block"
+                    onclick="location.href = '#'">
+                <i class="icon-chevron-left" /> back to store
+            </button>
+        </div>
+    </div>
+</div>
+

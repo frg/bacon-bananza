@@ -1,0 +1,70 @@
+﻿<table class="table table-bordered table-condensed">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#/store/">All Bacon</a>
+        </li>
+        <li ng-repeat ="category in categories | orderBy:'category' ">
+                <a href="#/store/{{category}}">{{ category }}</a>
+        </li>
+    </ol>
+    
+    <tr class="well">
+        <th class="col-xs-2 text-center">
+            <span ng-show="isLoggedIn()">
+                <i class="fa fa-shopping-cart hidden-xs" />
+                <a href="#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
+                    <b>{{cart.getTotalCount()}}</b> items, <b>{{cart.getTotalPrice() | currency:"&euro;"}}</b>
+                </a>
+            </span>
+        </th>
+        <th class="col-xs-7">
+            <div class="input-group">
+                <span class="input-group-addon hidden-xs">Search: </span>
+                <input class="form-control" style="max-width: 300px" ng-model="search">
+            </div>
+        </th>
+        <th class="col-xs-1" />
+        <th class="col-xs-2" ng-show="isLoggedIn()" />
+    </tr>
+    <tr ng-repeat="product in store.products | orderBy:'name' | filter:search" >
+        <!--<td class="tdCenter"><img ng-src="img/products/{{product.sku}}.jpg" alt="{{product.name}}" /></td>-->
+        <td >
+            <img class="img-responsive bacon-image" ng-src="{{product.image}}" alt="Image not found for: {{product.name}}" />
+        </td>
+
+        <td>
+            <a href="#/products/{{product.sku}}"><b>{{product.name}}</b></a><br />
+            {{product.info}}
+        </td>
+
+        <td class="text-center">
+            {{product.price | currency:"&euro;"}}
+        </td>
+
+        <td class="text-center" ng-show="isLoggedIn()">
+            <button class="btn btn-success" ng-click="cart.addItem(product.sku, product.name, product.price, 1)" ng-hide="getBaconStock(product.sku) <= 0 || getQuantityOfItemInCart(product.sku) >= getBaconStock(product.sku)">
+                <!--<i class="fa fa-shopping-cart"></i> Add to cart-->
+                <div class="hidden-xs"><i class="fa fa-plus"></i> Add to cart</div>
+                <div class="visible-xs"><i class="fa fa-plus"></i></div>
+            </button>
+            <button class="btn btn-danger" ng-show="getBaconStock(product.sku) <= 0" disabled>
+                <!--<i class="fa fa-shopping-cart"></i> Add to cart-->
+                <div class="hidden-xs"><i class="fa fa-times"></i> Out of stock :(</div>
+                <div class="visible-xs"><i class="fa fa-times"></i></div>
+            </button>
+            <button class="btn btn-danger" ng-show="getQuantityOfItemInCart(product.sku) >= getBaconStock(product.sku) && !getBaconStock(product.sku) <= 0" disabled>
+                <!--<i class="fa fa-shopping-cart"></i> Add to cart-->
+                <div class="hidden-xs"><i class="fa fa-times"></i> Max item quantity in cart!</div>
+                <div class="visible-xs"><i class="fa fa-times"></i></div>
+            </button>
+        </td>
+    </tr>
+    <!--<tr class="well">
+        <td class="tdRight" colspan="4">
+            <a href="#/cart" title="go to shopping cart" ng-disabled="cart.getTotalCount() < 1">
+                <i class="icon-shopping-cart" />
+                <b>{{cart.getTotalCount()}}</b> items, <b>{{cart.getTotalPrice() | currency:"&euro;"}}</b>
+            </a>
+        </td>
+    </tr>-->
+</table>
